@@ -54,7 +54,7 @@ Respondé ÚNICAMENTE con un JSON válido, sin texto antes ni después, con esta
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
+        model: "claude-sonnet-5",
         max_tokens: 600,
         system: systemPrompt,
         messages: [{ role: "user", content: rawNotes }],

@@ -13,7 +13,12 @@ import { createDraft, getDraft, updateDraft, deleteDraft } from "@/lib/supabase/
 import { logPublishedUpdate, logFailedUpdate } from "@/lib/supabase/devlog";
 
 const APP_ID = process.env.DISCORD_APP_ID!;
-const STAFF_ROLE_ID = process.env.DISCORD_STAFF_ROLE_ID;
+// Uno o más role IDs separados por coma (ej: "id1,id2") — cualquiera de esos
+// roles puede correr /update.
+const STAFF_ROLE_IDS = (process.env.DISCORD_STAFF_ROLE_ID ?? "")
+  .split(",")
+  .map((id) => id.trim())
+  .filter(Boolean);
 
 // Discord Interaction types
 const PING = 1;
@@ -58,7 +63,7 @@ function handleCommand(interaction: any) {
   // Control de permisos: además del default_member_permissions del comando,
   // chequeamos el rol de staff explícito por si el server tiene jerarquías propias.
   const memberRoles: string[] = interaction.member?.roles ?? [];
-  if (STAFF_ROLE_ID && !memberRoles.includes(STAFF_ROLE_ID)) {
+  if (STAFF_ROLE_IDS.length > 0 && !memberRoles.some((r) => STAFF_ROLE_IDS.includes(r))) {
     return NextResponse.json({
       type: 4,
       data: { content: "No tenés permiso para publicar actualizaciones.", flags: 64 },
