@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import { verifyDiscordRequest } from "@/lib/discord/verify";
 import {
   buildUpdateEmbed,
@@ -75,9 +76,13 @@ function handleCommand(interaction: any) {
   );
 
   // El trabajo pesado (llamar a la IA) no puede terminar en <3s, así que
-  // respondemos diferido ya mismo y seguimos procesando después.
-  processCommandAsync(interaction, options).catch((err) =>
-    console.error("Error procesando /update:", err)
+  // respondemos diferido ya mismo y seguimos procesando después. waitUntil
+  // evita que Vercel congele la función serverless antes de que termine
+  // este trabajo en segundo plano.
+  waitUntil(
+    processCommandAsync(interaction, options).catch((err) =>
+      console.error("Error procesando /update:", err)
+    )
   );
 
   return NextResponse.json({ type: 5, data: { flags: 64 } }); // deferred, ephemeral
@@ -153,8 +158,10 @@ async function processCommandAsync(interaction: any, options: any) {
 function handleButton(interaction: any) {
   const [action, draftId] = interaction.data.custom_id.split(":");
 
-  processButtonAsync(interaction, action, draftId).catch((err) =>
-    console.error("Error procesando botón:", err)
+  waitUntil(
+    processButtonAsync(interaction, action, draftId).catch((err) =>
+      console.error("Error procesando botón:", err)
+    )
   );
 
   return NextResponse.json({ type: 6 }); // deferred update message (sin nuevo mensaje)

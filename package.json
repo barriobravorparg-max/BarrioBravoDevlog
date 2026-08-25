@@ -10,21 +10,22 @@
     "register-commands": "tsx scripts/register-commands.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "@vercel/functions": "^3.9.5",
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tweetnacl": "^1.0.3",
-    "@supabase/supabase-js": "^2.45.4"
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
-    "typescript": "^5.6.3",
     "@types/node": "^20.16.11",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
-    "tsx": "^4.19.1",
+    "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.5",
-    "tailwindcss": "^3.4.13",
     "postcss": "^8.4.47",
-    "autoprefixer": "^10.4.20"
+    "tailwindcss": "^3.4.13",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
   }
 }
