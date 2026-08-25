@@ -13,6 +13,10 @@ import { generateBanner } from "@/lib/ai/generateBanner";
 import { createDraft, getDraft, updateDraft, deleteDraft } from "@/lib/supabase/drafts";
 import { logPublishedUpdate, logFailedUpdate } from "@/lib/supabase/devlog";
 
+// El trabajo en segundo plano (IA + banner + Discord + Supabase) puede pasar
+// los 10s por defecto del plan Hobby — le damos más margen.
+export const maxDuration = 60;
+
 const APP_ID = process.env.DISCORD_APP_ID!;
 // Uno o más role IDs separados por coma (ej: "id1,id2") — cualquiera de esos
 // roles puede correr /update.
