@@ -67,7 +67,10 @@ Respondé ÚNICAMENTE con un JSON válido, sin texto antes ni después, con esta
     }
 
     const data = await res.json();
-    const text = data.content?.[0]?.text ?? "";
+    // Claude a veces antepone un bloque "thinking" antes del de texto, así
+    // que hay que buscarlo por tipo en vez de asumir que es content[0].
+    const textBlock = data.content?.find((block: any) => block.type === "text");
+    const text = textBlock?.text ?? "";
     const cleaned = text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(cleaned);
 
